@@ -44,22 +44,12 @@ StudySphere helps students organize study materials, manage assignments, collabo
 
 ---
 
-# 📸 Screenshots
-
-> Add project screenshots here
-
-```md
-![Dashboard](./screenshots/dashboard.png)
-```
-
----
-
 # 🚀 Getting Started
 
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/studysphere.git
+git clone https://github.com/2ndjoy/studysphere-
 cd studysphere
 ```
 
@@ -137,11 +127,6 @@ StudySphere/
 - PDF preview system
 - Drag-and-drop Kanban board
 
----
-
-# 📄 License
-
-This project is licensed under the MIT License.
 
 ---
 
