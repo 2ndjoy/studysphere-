@@ -8,6 +8,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Subjects from "./pages/Subjects";
 import Assignments from "./pages/Assignments";
 import Notes from "./pages/Notes";
+import CalendarPage from "./pages/Calendar";
+import Resources from "./pages/Resources";
+
+
+
 
 function App() {
   return (
@@ -49,6 +54,21 @@ function App() {
             element={
               <ProtectedRoute>
                 <Notes />
+              </ProtectedRoute>
+            }
+          /><Route
+            path="/calendar"
+            element={
+              <ProtectedRoute>
+                <CalendarPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/resources"
+            element={
+              <ProtectedRoute>
+                <Resources />
               </ProtectedRoute>
             }
           />

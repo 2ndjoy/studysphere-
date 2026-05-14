@@ -12,7 +12,7 @@ import {
     createSubject,
     deleteSubject,
 } from "../services/subjectService";
-
+import { motion } from "framer-motion";
 function Subjects() {
 
     const [subjects, setSubjects] =
@@ -158,8 +158,24 @@ function Subjects() {
                 </p>
             ) : subjects.length === 0 ? (
 
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-10 text-center">
-
+                <motion.div
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    transition={{
+                        duration: 0.4,
+                    }}
+                    whileHover={{
+                        y: -5,
+                        scale: 1.02,
+                    }}
+                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                >
                     <h2 className="text-2xl font-semibold mb-2">
                         No Subjects Yet
                     </h2>
@@ -168,7 +184,7 @@ function Subjects() {
                         Create your first subject
                     </p>
 
-                </div>
+                </motion.div>
 
             ) : (
 

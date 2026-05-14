@@ -6,7 +6,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
-
+import { motion } from "framer-motion";
 function ProductivityBarChart({
     completed,
     pending,
@@ -24,7 +24,24 @@ function ProductivityBarChart({
     ];
 
     return (
-        <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-6">
+        <motion.div
+            initial={{
+                opacity: 0,
+                y: 20,
+            }}
+            animate={{
+                opacity: 1,
+                y: 0,
+            }}
+            transition={{
+                duration: 0.4,
+            }}
+            whileHover={{
+                y: -5,
+                scale: 1.02,
+            }}
+            className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+        >
 
             <h2 className="text-2xl font-semibold mb-6">
                 Productivity Overview
@@ -62,7 +79,7 @@ function ProductivityBarChart({
 
             </div>
 
-        </div>
+        </motion.div>
     );
 }
 

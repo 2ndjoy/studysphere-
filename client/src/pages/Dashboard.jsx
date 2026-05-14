@@ -3,10 +3,10 @@ import {
     useState,
 } from "react";
 
-import DashboardLayout from "../layouts/DashboardLayout";
-import AssignmentPieChart from "../components/charts/AssignmentPieChart";
+import { motion } from "framer-motion";
 
-import ProductivityBarChart from "../components/charts/ProductivityBarChart";
+import DashboardLayout from "../layouts/DashboardLayout";
+
 import {
     FaBook,
     FaClipboardList,
@@ -17,6 +17,10 @@ import {
 import {
     getDashboardStats,
 } from "../services/dashboardService";
+
+import AssignmentPieChart from "../components/charts/AssignmentPieChart";
+
+import ProductivityBarChart from "../components/charts/ProductivityBarChart";
 
 function Dashboard() {
 
@@ -70,7 +74,20 @@ function Dashboard() {
         <DashboardLayout>
 
             {/* Header */}
-            <div className="mb-8">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    y: 15,
+                }}
+                animate={{
+                    opacity: 1,
+                    y: 0,
+                }}
+                transition={{
+                    duration: 0.3,
+                }}
+                className="mb-8"
+            >
 
                 <h1 className="text-4xl font-bold">
                     Dashboard
@@ -81,14 +98,31 @@ function Dashboard() {
                     workspace
                 </p>
 
-            </div>
+            </motion.div>
 
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
 
                 {/* Subjects */}
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-6">
+                <motion.div
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    transition={{
+                        duration: 0.4,
+                    }}
+                    whileHover={{
+                        y: -5,
+                        scale: 1.02,
+                    }}
+                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                >
 
                     <div className="flex items-center justify-between mb-4">
 
@@ -103,16 +137,31 @@ function Dashboard() {
                     </div>
 
                     <h2 className="text-4xl font-bold">
-                        {
-                            stats.totalSubjects
-                        }
+                        {stats.totalSubjects}
                     </h2>
 
-                </div>
+                </motion.div>
 
 
                 {/* Assignments */}
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-6">
+                <motion.div
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    transition={{
+                        duration: 0.45,
+                    }}
+                    whileHover={{
+                        y: -5,
+                        scale: 1.02,
+                    }}
+                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                >
 
                     <div className="flex items-center justify-between mb-4">
 
@@ -127,16 +176,31 @@ function Dashboard() {
                     </div>
 
                     <h2 className="text-4xl font-bold">
-                        {
-                            stats.totalAssignments
-                        }
+                        {stats.totalAssignments}
                     </h2>
 
-                </div>
+                </motion.div>
 
 
                 {/* Completed */}
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-6">
+                <motion.div
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    transition={{
+                        duration: 0.5,
+                    }}
+                    whileHover={{
+                        y: -5,
+                        scale: 1.02,
+                    }}
+                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                >
 
                     <div className="flex items-center justify-between mb-4">
 
@@ -154,11 +218,28 @@ function Dashboard() {
                         {stats.completed}
                     </h2>
 
-                </div>
+                </motion.div>
 
 
                 {/* Pending */}
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-6">
+                <motion.div
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    transition={{
+                        duration: 0.55,
+                    }}
+                    whileHover={{
+                        y: -5,
+                        scale: 1.02,
+                    }}
+                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                >
 
                     <div className="flex items-center justify-between mb-4">
 
@@ -176,13 +257,26 @@ function Dashboard() {
                         {stats.pending}
                     </h2>
 
-                </div>
+                </motion.div>
 
             </div>
 
 
-            {/* Progress Section */}
-            <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-6">
+            {/* Progress */}
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    y: 20,
+                }}
+                animate={{
+                    opacity: 1,
+                    y: 0,
+                }}
+                transition={{
+                    duration: 0.6,
+                }}
+                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+            >
 
                 <div className="flex items-center justify-between mb-4">
 
@@ -191,10 +285,7 @@ function Dashboard() {
                     </h2>
 
                     <span className="text-2xl font-bold text-blue-400">
-                        {
-                            stats.completionRate
-                        }
-                        %
+                        {stats.completionRate}%
                     </span>
 
                 </div>
@@ -203,11 +294,17 @@ function Dashboard() {
                 {/* Progress Bar */}
                 <div className="w-full h-4 bg-[#0f172a] rounded-full overflow-hidden">
 
-                    <div
-                        className="h-full bg-blue-500 rounded-full transition-all duration-500"
-                        style={{
+                    <motion.div
+                        initial={{
+                            width: 0,
+                        }}
+                        animate={{
                             width: `${stats.completionRate}%`,
                         }}
+                        transition={{
+                            duration: 1,
+                        }}
+                        className="h-full bg-blue-500 rounded-full"
                     />
 
                 </div>
@@ -215,13 +312,12 @@ function Dashboard() {
                 <p className="text-gray-400 mt-4">
                     You’ve completed{" "}
                     {stats.completed} out of{" "}
-                    {
-                        stats.totalAssignments
-                    }{" "}
-                    assignments.
+                    {stats.totalAssignments} assignments.
                 </p>
 
-            </div>
+            </motion.div>
+
+
             {/* Charts */}
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-8">
 
@@ -236,6 +332,7 @@ function Dashboard() {
                 />
 
             </div>
+
         </DashboardLayout>
     );
 }

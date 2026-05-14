@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-
+import toast from "react-hot-toast"; import { motion } from "framer-motion";
 function Register() {
     const [formData, setFormData] = useState({
         name: "",
@@ -26,12 +26,12 @@ function Register() {
 
             console.log(response.data);
 
-            alert("Registration successful!");
+            toast.success("Registration successful!");
 
         } catch (error) {
             console.log(error.response.data);
 
-            alert(error.response.data.message);
+            toast.error(error.response.data.message);
         }
     };
 

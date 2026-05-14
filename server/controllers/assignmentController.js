@@ -14,6 +14,7 @@ exports.createAssignment = async (
             title,
             dueDate,
             subject,
+            priority,
         } = req.body;
 
         const assignment =
@@ -21,6 +22,7 @@ exports.createAssignment = async (
                 title,
                 dueDate,
                 subject,
+                priority,
                 user: req.user.id,
             });
 

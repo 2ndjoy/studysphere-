@@ -1,12 +1,28 @@
 import { FaTrash } from "react-icons/fa";
-
+import { motion } from "framer-motion";
 function SubjectCard({
     subject,
     onDelete,
 }) {
     return (
-        <div className="bg-[#1e293b] p-6 rounded-2xl border border-white/10 flex items-center justify-between">
-
+        <motion.div
+            initial={{
+                opacity: 0,
+                y: 20,
+            }}
+            animate={{
+                opacity: 1,
+                y: 0,
+            }}
+            transition={{
+                duration: 0.4,
+            }}
+            whileHover={{
+                y: -5,
+                scale: 1.02,
+            }}
+            className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+        >
             <div className="flex items-center gap-4">
 
                 <div
@@ -32,7 +48,7 @@ function SubjectCard({
                 <FaTrash />
             </button>
 
-        </div>
+        </motion.div>
     );
 }
 

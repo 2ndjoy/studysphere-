@@ -1,12 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
 import {
     FaBook,
     FaClipboardList,
     FaHome,
     FaStickyNote,
     FaSignOutAlt,
-    FaBars,
+    FaBars, FaCalendarAlt, FaFolderOpen
 } from "react-icons/fa";
 
 import { useContext, useState } from "react";
@@ -119,7 +119,26 @@ function DashboardLayout({ children }) {
                         <FaStickyNote />
                         Notes
                     </NavLink>
-
+                    <NavLink
+                        to="/calendar"
+                        className={navLinkClass}
+                        onClick={() =>
+                            setIsSidebarOpen(false)
+                        }
+                    >
+                        <FaCalendarAlt />
+                        Calendar
+                    </NavLink>
+                    <NavLink
+                        to="/resources"
+                        className={navLinkClass}
+                        onClick={() =>
+                            setIsSidebarOpen(false)
+                        }
+                    >
+                        <FaFolderOpen />
+                        Resources
+                    </NavLink>
                 </nav>
 
                 {/* Logout */}

@@ -4,7 +4,7 @@ import {
 } from "react";
 
 import DashboardLayout from "../layouts/DashboardLayout";
-
+import { motion } from "framer-motion";
 import AssignmentCard from "../components/AssignmentCard";
 
 import {
@@ -51,7 +51,8 @@ function Assignments() {
 
     const [subjectFilter, setSubjectFilter] =
         useState("all");
-
+    const [priority, setPriority] =
+        useState("medium");
     // FETCH DATA
     const fetchAssignments =
         async () => {
@@ -134,8 +135,9 @@ function Assignments() {
                         title,
                         dueDate,
                         subject:
-                            selectedSubject,
+                            selectedSubject, priority,
                     });
+                setPriority("medium");
 
                 setAssignments([
                     newAssignment,
@@ -209,7 +211,20 @@ function Assignments() {
         <DashboardLayout>
 
             {/* Header */}
-            <div className="mb-8">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    y: 15,
+                }}
+                animate={{
+                    opacity: 1,
+                    y: 0,
+                }}
+                transition={{
+                    duration: 0.3,
+                }}
+                className="mb-8"
+            >
 
                 <h1 className="text-4xl font-bold">
                     Assignments
@@ -219,7 +234,7 @@ function Assignments() {
                     Track your study tasks
                 </p>
 
-            </div>
+            </motion.div>
 
 
             {/* Form */}
@@ -281,7 +296,27 @@ function Assignments() {
                     )}
 
                 </select>
+                <select
+                    value={priority}
+                    onChange={(e) =>
+                        setPriority(e.target.value)
+                    }
+                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                >
 
+                    <option value="low">
+                        Low Priority
+                    </option>
+
+                    <option value="medium">
+                        Medium Priority
+                    </option>
+
+                    <option value="high">
+                        High Priority
+                    </option>
+
+                </select>
                 <button
                     type="submit"
                     className="bg-blue-600 hover:bg-blue-700 transition rounded-xl font-semibold"
@@ -291,8 +326,24 @@ function Assignments() {
 
             </form>
             {/* Search & Filters */}
-            <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8 grid md:grid-cols-3 gap-4">
-
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    y: 20,
+                }}
+                animate={{
+                    opacity: 1,
+                    y: 0,
+                }}
+                transition={{
+                    duration: 0.4,
+                }}
+                whileHover={{
+                    y: -5,
+                    scale: 1.02,
+                }}
+                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+            >
                 {/* Search */}
                 <input
                     type="text"
@@ -359,7 +410,7 @@ function Assignments() {
 
                 </select>
 
-            </div>
+            </motion.div>
 
             {/* Loading */}
             {loading ? (
@@ -371,7 +422,24 @@ function Assignments() {
             ) : assignments.length ===
                 0 ? (
 
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-10 text-center">
+                <motion.div
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    transition={{
+                        duration: 0.4,
+                    }}
+                    whileHover={{
+                        y: -5,
+                        scale: 1.02,
+                    }}
+                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                >
 
                     <h2 className="text-2xl font-semibold mb-2">
                         No Assignments Yet
@@ -381,7 +449,7 @@ function Assignments() {
                         Create your first assignment
                     </p>
 
-                </div>
+                </motion.div>
 
             ) : (
 

@@ -1,9 +1,10 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
-
+// import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 function Login() {
     const navigate = useNavigate();
 
@@ -37,12 +38,11 @@ function Login() {
 
             // Update context
             setToken(response.data.token);
-
-            // Redirect
+            toast.success("Welcome back!"); // Redirect
             navigate("/dashboard");
 
         } catch (error) {
-            alert(
+            toast.error(
                 error.response?.data?.message ||
                 "Something went wrong"
             );

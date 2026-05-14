@@ -16,6 +16,10 @@ const assignmentSchema = new mongoose.Schema(
             type: String,
             enum: ["pending", "completed"],
             default: "pending",
+        }, priority: {
+            type: String,
+            enum: ["low", "medium", "high"],
+            default: "medium",
         },
 
         subject: {
