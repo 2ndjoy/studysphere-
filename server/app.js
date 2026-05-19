@@ -14,11 +14,19 @@ const noteRoutes = require(
 
 
 app.use(express.json());
+const cors = require("cors");
+
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://studysphere-mocha.vercel.app/",
+      "https://dashing-bublanina-164786.netlify.app",
+    ],
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE",
     ],
     credentials: true,
   })
