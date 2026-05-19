@@ -18,7 +18,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://studysphere.vercel.app",
+      "https://studysphere-mocha.vercel.app/",
     ],
     credentials: true,
   })
