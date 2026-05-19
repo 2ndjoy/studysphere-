@@ -1,7 +1,7 @@
 const express = require("express");
 
 const app = express();
-const cors = require("cors");
+// const cors = require("cors");
 const assignmentRoutes = require(
     "./routes/assignmentRoutes"
 );
@@ -21,6 +21,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://dashing-bublanina-164786.netlify.app",
+      "https://studysphere-mocha.vercel.app"
     ],
     methods: [
       "GET",
