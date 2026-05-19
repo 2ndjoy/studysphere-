@@ -10,7 +10,7 @@ mongoose
         console.log("MongoDB Connected");
 
         app.listen(5000, () => {
-            console.log("Server running on port 5000");
+            console.log("Serverr running on port 5000");
         });
     })
     .catch((err) => {
