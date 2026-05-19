@@ -14,7 +14,15 @@ const noteRoutes = require(
 
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://studysphere.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 
 const authRoutes = require("./routes/authRoutes");
 const subjectRoutes = require("./routes/subjectRoutes");
