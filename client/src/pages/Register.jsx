@@ -1,7 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast"; import { motion } from "framer-motion";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+
 function Register() {
+
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -27,6 +33,9 @@ function Register() {
             console.log(response.data);
 
             toast.success("Registration successful!");
+
+            // Navigate to login page
+            navigate("/login");
 
         } catch (error) {
             console.log(error.response.data);
@@ -84,6 +93,13 @@ function Register() {
                 >
                     Register
                 </button>
+
+                <p className="mt-4">
+                    Already have an account ?
+                    <span className="text-blue-400">
+                        <Link to="/login"> Log in</Link>
+                    </span>
+                </p>
             </form>
         </div>
     );
