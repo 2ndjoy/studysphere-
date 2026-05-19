@@ -23,7 +23,7 @@ function NoteCard({
             whileHover={{
                 y: -5,
             }}
-            className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+            className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
         >
 
             {/* Top */}

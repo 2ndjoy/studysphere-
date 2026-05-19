@@ -10,13 +10,14 @@ import Assignments from "./pages/Assignments";
 import Notes from "./pages/Notes";
 import CalendarPage from "./pages/Calendar";
 import Resources from "./pages/Resources";
+import NotFound from "./pages/NotFound";
 
 
 
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white">
+    <div className="min-h-screen bg-white dark:bg-[#0f172a] text-gray-900 dark:text-white">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -71,6 +72,10 @@ function App() {
                 <Resources />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="*"
+            element={<NotFound />}
           />
         </Routes>
       </BrowserRouter>

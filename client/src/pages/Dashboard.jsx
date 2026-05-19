@@ -21,6 +21,7 @@ import {
 import AssignmentPieChart from "../components/charts/AssignmentPieChart";
 
 import ProductivityBarChart from "../components/charts/ProductivityBarChart";
+import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
 
 function Dashboard() {
 
@@ -60,14 +61,12 @@ function Dashboard() {
 
 
     if (loading) {
-        return (
-            <DashboardLayout>
-                <p className="text-gray-400">
-                    Loading dashboard...
-                </p>
-            </DashboardLayout>
-        );
-    }
+  return (
+    <DashboardLayout>
+      <DashboardSkeleton />
+    </DashboardLayout>
+  );
+}
 
 
     return (
@@ -121,7 +120,7 @@ function Dashboard() {
                         y: -5,
                         scale: 1.02,
                     }}
-                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
                 >
 
                     <div className="flex items-center justify-between mb-4">
@@ -160,7 +159,7 @@ function Dashboard() {
                         y: -5,
                         scale: 1.02,
                     }}
-                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
                 >
 
                     <div className="flex items-center justify-between mb-4">
@@ -199,7 +198,7 @@ function Dashboard() {
                         y: -5,
                         scale: 1.02,
                     }}
-                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
                 >
 
                     <div className="flex items-center justify-between mb-4">
@@ -238,7 +237,7 @@ function Dashboard() {
                         y: -5,
                         scale: 1.02,
                     }}
-                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
                 >
 
                     <div className="flex items-center justify-between mb-4">
@@ -275,7 +274,7 @@ function Dashboard() {
                 transition={{
                     duration: 0.6,
                 }}
-                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
             >
 
                 <div className="flex items-center justify-between mb-4">
@@ -292,7 +291,7 @@ function Dashboard() {
 
 
                 {/* Progress Bar */}
-                <div className="w-full h-4 bg-[#0f172a] rounded-full overflow-hidden">
+                <div className="w-full h-4 bg-white dark:bg-[#0f172a] rounded-full overflow-hidden">
 
                     <motion.div
                         initial={{

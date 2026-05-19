@@ -20,7 +20,7 @@ function NoteEditor({
         editorProps: {
             attributes: {
                 class:
-                    "min-h-[250px] bg-[#0f172a] border border-white/10 rounded-2xl p-5 outline-none prose prose-invert max-w-none",
+                    "min-h-[250px] bg-white dark:bg-[#0f172a] border border-white/10 rounded-2xl p-5 outline-none prose prose-invert max-w-none",
             },
         },
 
@@ -53,7 +53,7 @@ function NoteEditor({
                             .toggleBold()
                             .run()
                     }
-                    className="bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
+                    className="bg-gray-100 dark:bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
                 >
                     Bold
                 </button>
@@ -66,7 +66,7 @@ function NoteEditor({
                             .toggleItalic()
                             .run()
                     }
-                    className="bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
+                    className="bg-gray-100 dark:bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
                 >
                     Italic
                 </button>
@@ -81,7 +81,7 @@ function NoteEditor({
                             })
                             .run()
                     }
-                    className="bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
+                    className="bg-gray-100 dark:bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
                 >
                     H1
                 </button>
@@ -94,7 +94,7 @@ function NoteEditor({
                             .toggleBulletList()
                             .run()
                     }
-                    className="bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
+                    className="bg-gray-100 dark:bg-[#1e293b] hover:bg-[#334155] transition px-4 py-2 rounded-xl"
                 >
                     List
                 </button>

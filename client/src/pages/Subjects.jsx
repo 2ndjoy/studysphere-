@@ -128,7 +128,7 @@ function Subjects() {
                 onSubmit={
                     handleCreateSubject
                 }
-                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8 flex flex-col md:flex-row gap-4"
+                className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8 flex flex-col md:flex-row gap-4"
             >
 
                 <input
@@ -138,7 +138,7 @@ function Subjects() {
                     onChange={(e) =>
                         setTitle(e.target.value)
                     }
-                    className="flex-1 bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none text-white"
+                    className="flex-1 bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none text-gray-900 dark:text-white"
                 />
 
                 <button
@@ -174,7 +174,7 @@ function Subjects() {
                         y: -5,
                         scale: 1.02,
                     }}
-                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
                 >
                     <h2 className="text-2xl font-semibold mb-2">
                         No Subjects Yet

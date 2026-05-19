@@ -157,7 +157,7 @@ function Notes() {
             {/* Form */}
             <form
                 onSubmit={handleCreate}
-                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8"
+                className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8"
             >
 
                 <input
@@ -169,7 +169,7 @@ function Notes() {
                             e.target.value
                         )
                     }
-                    className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none mb-6"
+                    className="w-full bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none mb-6"
                 />
 
                 <NoteEditor
@@ -196,7 +196,7 @@ function Notes() {
 
             ) : notes.length === 0 ? (
 
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-10 text-center">
+                <div className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-10 text-center">
 
                     <h2 className="text-2xl font-semibold mb-2">
                         No Notes Yet

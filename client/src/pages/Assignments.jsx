@@ -2,11 +2,11 @@ import {
     useEffect,
     useState,
 } from "react";
-
+import useDebounce from "../hooks/useDebounce";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { motion } from "framer-motion";
 import AssignmentCard from "../components/AssignmentCard";
-
+import AssignmentSkeleton from "../components/skeletons/AssignmentSkeleton";
 import {
     getAssignments,
     createAssignment,
@@ -45,7 +45,11 @@ function Assignments() {
         useState(true);
     const [searchTerm, setSearchTerm] =
         useState("");
-
+    const debouncedSearch =
+        useDebounce(
+            searchTerm,
+            500
+        );
     const [statusFilter, setStatusFilter] =
         useState("all");
 
@@ -63,7 +67,7 @@ function Assignments() {
 
                 const data =
                     await getAssignments({
-                        search: searchTerm,
+                        search: debouncedSearch,
                         status: statusFilter,
                         subject: subjectFilter,
                     });
@@ -109,10 +113,10 @@ function Assignments() {
         fetchAssignments();
 
     }, [
-        searchTerm,
-        statusFilter,
-        subjectFilter,
-    ]);
+  debouncedSearch,
+  statusFilter,
+  subjectFilter,
+]);
 
     // CREATE
     const handleCreate =
@@ -240,7 +244,7 @@ function Assignments() {
             {/* Form */}
             <form
                 onSubmit={handleCreate}
-                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8 grid md:grid-cols-4 gap-4"
+                className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8 grid md:grid-cols-4 gap-4"
             >
 
                 <input
@@ -252,7 +256,7 @@ function Assignments() {
                             e.target.value
                         )
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 />
 
                 <input
@@ -263,7 +267,7 @@ function Assignments() {
                             e.target.value
                         )
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 />
 
                 <select
@@ -273,7 +277,7 @@ function Assignments() {
                             e.target.value
                         )
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 >
 
                     <option value="">
@@ -301,7 +305,7 @@ function Assignments() {
                     onChange={(e) =>
                         setPriority(e.target.value)
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 >
 
                     <option value="low">
@@ -342,7 +346,7 @@ function Assignments() {
                     y: -5,
                     scale: 1.02,
                 }}
-                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
             >
                 {/* Search */}
                 <input
@@ -354,7 +358,7 @@ function Assignments() {
                             e.target.value
                         )
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 />
 
 
@@ -366,7 +370,7 @@ function Assignments() {
                             e.target.value
                         )
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 >
 
                     <option value="all">
@@ -392,7 +396,7 @@ function Assignments() {
                             e.target.value
                         )
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 >
 
                     <option value="all">
@@ -413,14 +417,22 @@ function Assignments() {
             </motion.div>
 
             {/* Loading */}
+            {/* Assignments */}
             {loading ? (
 
-                <p className="text-gray-400">
-                    Loading...
-                </p>
+                <div className="grid gap-6">
 
-            ) : assignments.length ===
-                0 ? (
+                    {[1, 2, 3].map((item) => (
+
+                        <AssignmentSkeleton
+                            key={item}
+                        />
+
+                    ))}
+
+                </div>
+
+            ) : assignments.length === 0 ? (
 
                 <motion.div
                     initial={{
@@ -438,14 +450,14 @@ function Assignments() {
                         y: -5,
                         scale: 1.02,
                     }}
-                    className="bg-[#1e293b] border border-white/10 rounded-2xl p-6"
+                    className="bg-gray-100 dark:bg-[#1e293b] border border-black/5 dark:border-white/10 rounded-2xl p-10 text-center"
                 >
 
                     <h2 className="text-2xl font-semibold mb-2">
                         No Assignments Yet
                     </h2>
 
-                    <p className="text-gray-400">
+                    <p className="text-gray-500 dark:text-gray-400">
                         Create your first assignment
                     </p>
 

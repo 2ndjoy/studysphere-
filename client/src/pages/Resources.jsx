@@ -177,7 +177,7 @@ function Resources() {
             {/* Upload Form */}
             <form
                 onSubmit={handleUpload}
-                className="bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8 grid md:grid-cols-3 gap-4"
+                className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6 mb-8 grid md:grid-cols-3 gap-4"
             >
 
                 <input
@@ -187,7 +187,7 @@ function Resources() {
                     onChange={(e) =>
                         setTitle(e.target.value)
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 outline-none"
                 />
 
                 <input
@@ -197,7 +197,7 @@ function Resources() {
                             e.target.files[0]
                         )
                     }
-                    className="bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3"
+                    className="bg-white dark:bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3"
                 />
 
                 <button
@@ -223,7 +223,7 @@ function Resources() {
             ) : resources.length ===
                 0 ? (
 
-                <div className="bg-[#1e293b] border border-white/10 rounded-2xl p-10 text-center">
+                <div className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-10 text-center">
 
                     <h2 className="text-2xl font-semibold mb-2">
                         No Resources Yet

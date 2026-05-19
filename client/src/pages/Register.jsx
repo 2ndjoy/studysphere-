@@ -20,7 +20,7 @@ function Register() {
 
         try {
             const response = await axios.post(
-                "http://localhost:5000/api/auth/register",
+                `${import.meta.env.VITE_API_URL}/auth/register`,
                 formData
             );
 
@@ -36,12 +36,12 @@ function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0f172a] flex items-center justify-center px-4">
+        <div className="min-h-screen bg-white dark:bg-[#0f172a] flex items-center justify-center px-4">
             <form
                 onSubmit={handleSubmit}
-                className="w-full max-w-md bg-[#1e293b] p-8 rounded-2xl shadow-lg"
+                className="w-full max-w-md bg-gray-100 dark:bg-[#1e293b] p-8 rounded-2xl shadow-lg"
             >
-                <h1 className="text-3xl font-bold text-white mb-6 text-center">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
                     Register
                 </h1>
 
@@ -52,7 +52,7 @@ function Register() {
                         placeholder="Name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full p-3 rounded-lg bg-[#334155] text-white outline-none"
+                        className="w-full p-3 rounded-lg bg-[#334155] text-gray-900 dark:text-white outline-none"
                     />
                 </div>
 
@@ -63,7 +63,7 @@ function Register() {
                         placeholder="Email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full p-3 rounded-lg bg-[#334155] text-white outline-none"
+                        className="w-full p-3 rounded-lg bg-[#334155] text-gray-900 dark:text-white outline-none"
                     />
                 </div>
 
@@ -74,13 +74,13 @@ function Register() {
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="w-full p-3 rounded-lg bg-[#334155] text-white outline-none"
+                        className="w-full p-3 rounded-lg bg-[#334155] text-gray-900 dark:text-white outline-none"
                     />
                 </div>
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 transition-all p-3 rounded-lg text-white font-semibold"
+                    className="w-full bg-blue-600 hover:bg-blue-700 transition-all p-3 rounded-lg text-gray-900 dark:text-white font-semibold"
                 >
                     Register
                 </button>

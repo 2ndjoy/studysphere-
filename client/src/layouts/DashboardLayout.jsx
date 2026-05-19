@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
     FaBook,
@@ -6,18 +6,28 @@ import {
     FaHome,
     FaStickyNote,
     FaSignOutAlt,
-    FaBars, FaCalendarAlt, FaFolderOpen
+    FaBars, FaCalendarAlt, FaFolderOpen,FaMoon,
+FaSun
 } from "react-icons/fa";
 
 import { useContext, useState } from "react";
 
 import { AuthContext } from "../context/AuthContext";
+import {
+  ThemeContext,
+} from "../context/ThemeContext";
 
 function DashboardLayout({ children }) {
+    
     const navigate = useNavigate();
 
     const { logout } = useContext(AuthContext);
-
+const {
+  theme,
+  toggleTheme,
+} = useContext(
+  ThemeContext
+);
     const [isSidebarOpen, setIsSidebarOpen] =
         useState(false);
 
@@ -29,12 +39,12 @@ function DashboardLayout({ children }) {
 
     const navLinkClass = ({ isActive }) =>
         `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
-            ? "bg-blue-600 text-white"
+            ? "bg-blue-600 text-gray-900 dark:text-white"
             : "hover:bg-white/10 text-gray-300"
         }`;
 
     return (
-        <div className="min-h-screen bg-[#0f172a] text-white flex">
+        <div className="min-h-screen bg-white dark:bg-[#0f172a] text-gray-900 dark:text-white flex">
 
             {/* Mobile Overlay */}
             {isSidebarOpen && (
@@ -64,9 +74,11 @@ function DashboardLayout({ children }) {
 
                 {/* Logo */}
                 <div className="mb-10">
-                    <h1 className="text-3xl font-bold tracking-tight">
+                    <Link to="/"><h1 className="text-3xl font-bold tracking-tight text-white">
                         StudySphere
                     </h1>
+                    </Link>
+                    
 
                     <p className="text-sm text-gray-400 mt-1">
                         Student Workspace
@@ -157,7 +169,18 @@ function DashboardLayout({ children }) {
 
                 {/* Topbar */}
                 <header className="h-16 border-b border-white/10 bg-[#111827]/80 backdrop-blur-md flex items-center justify-between gap-4 px-4 md:px-6 sticky top-0 z-30">
+<button
+  onClick={toggleTheme}
+  className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-center"
+>
 
+  {theme === "dark" ? (
+    <FaSun />
+  ) : (
+    <FaMoon />
+  )}
+
+</button>
                     {/* Left Side */}
                     <div className="flex items-center gap-4">
 
