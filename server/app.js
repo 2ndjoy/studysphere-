@@ -11,26 +11,30 @@ const resourceRoutes = require(
 const noteRoutes = require(
     "./routes/noteRoutes"
 );
+const userRoutes = require("./routes/userRoutes");
 
+const notificationRoutes = require(
+    "./routes/notificationRoutes"
+);
 
 app.use(express.json());
 const cors = require("cors");
 
 app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://dashing-bublanina-164786.netlify.app",
-      "https://studysphere-mocha.vercel.app"
-    ],
-    methods: [
-      "GET",
-      "POST",
-      "PUT",
-      "DELETE",
-    ],
-    credentials: true,
-  })
+    cors({
+        origin: [
+            "http://localhost:5173",
+            "https://dashing-bublanina-164786.netlify.app",
+            "https://studysphere-mocha.vercel.app"
+        ],
+        methods: [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+        ],
+        credentials: true,
+    })
 );
 
 const authRoutes = require("./routes/authRoutes");
@@ -52,7 +56,11 @@ app.use(
     "/api/notes",
     noteRoutes
 );
+app.use("/api/users", userRoutes);
 
-
+app.use(
+    "/api/notifications",
+    notificationRoutes
+);
 
 module.exports = app;

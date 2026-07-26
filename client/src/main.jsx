@@ -8,19 +8,28 @@ import "react-loading-skeleton/dist/skeleton.css";
 import AuthProvider from "./context/AuthContext";
 import ThemeProvider from "./context/ThemeContext";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { UserProvider } from "./context/UserContext";
+import {
+    NotificationProvider,
+} from "./context/NotificationContext";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ThemeProvider>
-        <ErrorBoundary>
+   <AuthProvider>
 
-    <AuthProvider>
-      <App />
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
-    </AuthProvider></ErrorBoundary>
+    <ThemeProvider>
+
+        <UserProvider>
+
+            <NotificationProvider>
+
+                <App />
+
+            </NotificationProvider>
+
+        </UserProvider>
+
     </ThemeProvider>
-  </React.StrictMode>
+
+</AuthProvider>
 );

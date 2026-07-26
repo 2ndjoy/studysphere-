@@ -17,6 +17,30 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        bio: {
+            type: String,
+            default: "",
+        },
+
+        university: {
+            type: String,
+            default: "",
+        },
+
+        department: {
+            type: String,
+            default: "",
+        },
+
+        semester: {
+            type: String,
+            default: "",
+        },
+
+        avatar: {
+            type: String,
+            default: "",
+        },
     },
     {
         timestamps: true,

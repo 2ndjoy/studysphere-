@@ -6,13 +6,17 @@ import {
 import { motion } from "framer-motion";
 
 import DashboardLayout from "../layouts/DashboardLayout";
-
 import {
     FaBook,
     FaClipboardList,
     FaCheckCircle,
     FaClock,
+    FaChartLine,
 } from "react-icons/fa";
+
+import StatsCard from "../components/dashboard/StatsCard";
+
+import { useUser } from "../context/UserContext";
 
 import {
     getDashboardStats,
@@ -22,9 +26,21 @@ import AssignmentPieChart from "../components/charts/AssignmentPieChart";
 
 import ProductivityBarChart from "../components/charts/ProductivityBarChart";
 import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
-
+import QuickActions from "../components/dashboard/QuickActions";
+import UpcomingDeadlines from "../components/dashboard/UpcomingDeadlines";
+import RecentActivity from "../components/dashboard/RecentActivity";
 function Dashboard() {
+const { user } = useUser();
 
+const hour = new Date().getHours();
+
+let greeting = "Good Evening";
+
+if (hour < 12)
+    greeting = "Good Morning";
+
+else if (hour < 18)
+    greeting = "Good Afternoon";
     const [stats, setStats] =
         useState(null);
 
@@ -73,193 +89,89 @@ function Dashboard() {
         <DashboardLayout>
 
             {/* Header */}
-            <motion.div
-                initial={{
-                    opacity: 0,
-                    y: 15,
-                }}
-                animate={{
-                    opacity: 1,
-                    y: 0,
-                }}
-                transition={{
-                    duration: 0.3,
-                }}
-                className="mb-8"
-            >
+          <motion.div
+    initial={{
+        opacity: 0,
+        y: 15,
+    }}
+    animate={{
+        opacity: 1,
+        y: 0,
+    }}
+    transition={{
+        duration: 0.3,
+    }}
+    className="mb-8"
+>
 
-                <h1 className="text-4xl font-bold">
-                    Dashboard
-                </h1>
+    <h1 className="text-4xl font-bold">
 
-                <p className="text-gray-400 mt-2">
-                    Welcome back to your
-                    workspace
-                </p>
+        {greeting},{" "}
 
-            </motion.div>
+        <span className="text-blue-500">
+            {user?.name || "Student"}
+        </span>
 
+        👋
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+    </h1>
 
-                {/* Subjects */}
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                        y: 20,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        y: 0,
-                    }}
-                    transition={{
-                        duration: 0.4,
-                    }}
-                    whileHover={{
-                        y: -5,
-                        scale: 1.02,
-                    }}
-                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
-                >
+    <p className="text-gray-400 mt-2">
 
-                    <div className="flex items-center justify-between mb-4">
+        Stay productive.
+        Keep learning.
+        Finish today's goals.
 
-                        <div className="bg-blue-500/20 text-blue-400 p-3 rounded-xl">
-                            <FaBook />
-                        </div>
+    </p>
 
-                        <span className="text-sm text-gray-400">
-                            Subjects
-                        </span>
-
-                    </div>
-
-                    <h2 className="text-4xl font-bold">
-                        {stats.totalSubjects}
-                    </h2>
-
-                </motion.div>
+</motion.div>
 
 
-                {/* Assignments */}
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                        y: 20,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        y: 0,
-                    }}
-                    transition={{
-                        duration: 0.45,
-                    }}
-                    whileHover={{
-                        y: -5,
-                        scale: 1.02,
-                    }}
-                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
-                >
+        {/* Dashboard Stats */}
 
-                    <div className="flex items-center justify-between mb-4">
+<div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-5 mb-8">
 
-                        <div className="bg-purple-500/20 text-purple-400 p-3 rounded-xl">
-                            <FaClipboardList />
-                        </div>
+    <StatsCard
+        title="Subjects"
+        value={stats.totalSubjects}
+        subtitle="Manage your courses"
+        icon={<FaBook />}
+        color="from-indigo-500 to-purple-600"
+    />
 
-                        <span className="text-sm text-gray-400">
-                            Assignments
-                        </span>
+    <StatsCard
+        title="Assignments"
+        value={stats.totalAssignments}
+        subtitle="Total assignments"
+        icon={<FaClipboardList />}
+        color="from-cyan-500 to-blue-600"
+    />
 
-                    </div>
+    <StatsCard
+        title="Completed"
+        value={stats.completed}
+        subtitle="Finished successfully"
+        icon={<FaCheckCircle />}
+        color="from-green-500 to-emerald-600"
+    />
 
-                    <h2 className="text-4xl font-bold">
-                        {stats.totalAssignments}
-                    </h2>
+    <StatsCard
+        title="Pending"
+        value={stats.pending}
+        subtitle="Waiting to finish"
+        icon={<FaClock />}
+        color="from-orange-500 to-red-500"
+    />
 
-                </motion.div>
+    <StatsCard
+        title="Progress"
+        value={`${stats.completionRate}%`}
+        subtitle="Overall completion"
+        icon={<FaChartLine />}
+        color="from-pink-500 to-fuchsia-600"
+    />
 
-
-                {/* Completed */}
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                        y: 20,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        y: 0,
-                    }}
-                    transition={{
-                        duration: 0.5,
-                    }}
-                    whileHover={{
-                        y: -5,
-                        scale: 1.02,
-                    }}
-                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
-                >
-
-                    <div className="flex items-center justify-between mb-4">
-
-                        <div className="bg-green-500/20 text-green-400 p-3 rounded-xl">
-                            <FaCheckCircle />
-                        </div>
-
-                        <span className="text-sm text-gray-400">
-                            Completed
-                        </span>
-
-                    </div>
-
-                    <h2 className="text-4xl font-bold">
-                        {stats.completed}
-                    </h2>
-
-                </motion.div>
-
-
-                {/* Pending */}
-                <motion.div
-                    initial={{
-                        opacity: 0,
-                        y: 20,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        y: 0,
-                    }}
-                    transition={{
-                        duration: 0.55,
-                    }}
-                    whileHover={{
-                        y: -5,
-                        scale: 1.02,
-                    }}
-                    className="bg-gray-100 dark:bg-[#1e293b] border border-white/10 rounded-2xl p-6"
-                >
-
-                    <div className="flex items-center justify-between mb-4">
-
-                        <div className="bg-yellow-500/20 text-yellow-400 p-3 rounded-xl">
-                            <FaClock />
-                        </div>
-
-                        <span className="text-sm text-gray-400">
-                            Pending
-                        </span>
-
-                    </div>
-
-                    <h2 className="text-4xl font-bold">
-                        {stats.pending}
-                    </h2>
-
-                </motion.div>
-
-            </div>
-
+</div>
 
             {/* Progress */}
             <motion.div
@@ -331,7 +243,21 @@ function Dashboard() {
                 />
 
             </div>
+<div className="grid xl:grid-cols-3 gap-6 mt-8">
 
+    <UpcomingDeadlines
+        assignments={
+            stats.upcomingAssignments
+        }
+    />
+
+    <QuickActions />
+
+    <RecentActivity
+        stats={stats}
+    />
+
+</div>
         </DashboardLayout>
     );
 }

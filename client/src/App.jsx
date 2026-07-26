@@ -12,7 +12,7 @@ import CalendarPage from "./pages/Calendar";
 import Resources from "./pages/Resources";
 import NotFound from "./pages/NotFound";
 
-
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -77,6 +77,14 @@ function App() {
             path="*"
             element={<NotFound />}
           />
+          <Route
+    path="/profile"
+    element={
+        <ProtectedRoute>
+            <Profile />
+        </ProtectedRoute>
+    }
+/>
         </Routes>
       </BrowserRouter>
     </div>

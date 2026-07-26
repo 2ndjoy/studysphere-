@@ -39,17 +39,27 @@ export const getDashboardStats =
                 )
                 : 0;
 
-        return {
-            totalSubjects:
-                subjects.length,
+      return {
+    totalSubjects: subjects.length,
 
-            totalAssignments:
-                assignments.length,
+    totalAssignments: assignments.length,
 
-            completed,
+    completed,
 
-            pending,
+    pending,
 
-            completionRate,
-        };
+    completionRate,
+
+    upcomingAssignments: assignments
+        .filter(
+            assignment =>
+                assignment.status !== "completed"
+        )
+        .sort(
+            (a, b) =>
+                new Date(a.dueDate) -
+                new Date(b.dueDate)
+        )
+        .slice(0, 5),
+};
     };
