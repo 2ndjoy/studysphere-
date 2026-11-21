@@ -271,7 +271,7 @@ describe("User Profile Security", () => {
         assert.equal(stored.name, "Profile Owner");
     });
 
-    it("returns 404 when the authenticated account no longer exists", async () => {
+    it("rejects an old JWT after the authenticated account is deleted", async () => {
         await User.findByIdAndDelete(owner.id);
 
         const getResponse = await request(app)
@@ -291,8 +291,18 @@ describe("User Profile Security", () => {
                 name: "Deleted User",
             });
 
-        assert.equal(getResponse.status, 404);
-        assert.equal(updateResponse.status, 404);
+        assert.equal(getResponse.status, 401);
+        assert.equal(updateResponse.status, 401);
+
+        assert.equal(
+            getResponse.body.message,
+            "Token failed"
+        );
+
+        assert.equal(
+            updateResponse.body.message,
+            "Token failed"
+        );
     });
 
     it("rejects avatar requests without an uploaded file", async () => {
