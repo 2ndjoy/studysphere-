@@ -5,6 +5,9 @@ const router = express.Router();
 const protect = require(
     "../middleware/authMiddleware"
 );
+const validateObjectId = require(
+    "../middleware/validateObjectId"
+);
 
 const {
 
@@ -35,11 +38,11 @@ router.post(
     protect,
     createNotification
 );
-
 // MARK AS READ
 router.patch(
     "/:id/read",
     protect,
+    validateObjectId,
     markAsRead
 );
 
@@ -54,6 +57,7 @@ router.patch(
 router.delete(
     "/:id",
     protect,
+    validateObjectId,
     deleteNotification
 );
 

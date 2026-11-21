@@ -8,7 +8,9 @@ const router =
 const protect = require(
     "../middleware/authMiddleware"
 );
-
+const validateObjectId = require(
+    "../middleware/validateObjectId"
+);
 const upload = require(
     "../middleware/uploadMiddleware"
 );
@@ -43,6 +45,7 @@ router.get(
 router.delete(
     "/:id",
     protect,
+    validateObjectId,
     deleteResource
 );
 
