@@ -396,6 +396,187 @@ Additional linting, formatting, testing, and container commands
 will be documented after their implementation.
 
 ---
+## Automated Testing
+
+StudySphere uses automated frontend and backend testing
+to improve application reliability, maintainability,
+and regression prevention.
+
+### Testing Technologies
+
+| Technology | Purpose |
+|---|---|
+| Vitest | Frontend test execution |
+| React Testing Library | React component testing |
+| Jest DOM | DOM assertions |
+| User Event | Simulated user interactions |
+| jsdom | Simulated browser environment |
+| V8 Coverage | Frontend code coverage |
+| Node.js Test Runner | Backend test execution |
+| Node.js Assert | Backend assertions |
+| Supertest | HTTP API integration testing |
+| MongoDB Memory Server | Isolated database testing |
+
+### Running Automated Tests
+
+Install the frontend and backend dependencies from
+the project root:
+
+```bash
+npm --prefix client ci
+npm --prefix server ci
+```
+
+Run frontend tests:
+
+```bash
+npm --prefix client test
+```
+
+Run backend tests:
+
+```bash
+npm --prefix server test
+```
+
+Run frontend tests in watch mode:
+
+```bash
+npm --prefix client run test:watch
+```
+
+### Code Coverage
+
+Generate frontend coverage:
+
+```bash
+npm --prefix client run test:coverage
+```
+
+The frontend HTML coverage report is available at:
+
+`client/coverage/index.html`
+
+LCOV coverage data is available at:
+
+`client/coverage/lcov.info`
+
+Generate backend coverage:
+
+```bash
+npm --prefix server run test:coverage
+```
+
+Backend coverage results are displayed in the terminal.
+
+### Current Automated Test Baseline
+
+Baseline established on 21 November 2026.
+
+| Test Suite | Tests | Passed |
+|---|---:|---:|
+| AssignmentCard component | 12 | 12 |
+| Backend smoke tests | 5 | 5 |
+| Authentication API | 11 | 11 |
+| Assignment API | 12 | 12 |
+| Subject API | 7 | 7 |
+| Total | 47 | 47 |
+
+All 47 automated tests passed locally.
+
+### Frontend Coverage Baseline
+
+| Metric | Overall Frontend | AssignmentCard |
+|---|---:|---:|
+| Statements | 1.76% | 100% |
+| Branches | 12.20% | 100% |
+| Functions | 1.59% | 100% |
+| Lines | 1.78% | 100% |
+
+Frontend coverage currently focuses on AssignmentCard
+regression testing. Additional components, pages,
+contexts, hooks, and services will be tested progressively.
+
+### Backend Coverage Baseline
+
+| Metric | Reported Coverage |
+|---|---:|
+| Lines | 68.35% |
+| Branches | 81.43% |
+| Functions | 46.15% |
+
+| Module | Lines | Branches | Functions |
+|---|---:|---:|---:|
+| Authentication middleware | 100% | 100% | 100% |
+| Authentication controller | 91.01% | 81.82% | 100% |
+| Assignment controller | 80.98% | 61.90% | 100% |
+| Subject controller | 78.57% | 70.00% | 100% |
+
+Backend coverage reflects modules loaded during testing.
+High code coverage does not guarantee complete functional
+or security validation.
+
+### Test Database Isolation
+
+Backend integration tests use MongoDB Memory Server
+with MongoDB version 8.2.6.
+
+The automated tests:
+
+- Start a temporary local MongoDB instance.
+- Bind the test database to 127.0.0.1.
+- Use the studysphere_test database.
+- Generate synthetic test users and records.
+- Generate a temporary JWT signing secret.
+- Use placeholder Cloudinary configuration.
+- Do not require existing MongoDB Atlas credentials.
+- Remove test records between test cases.
+- Disconnect and stop the temporary database after testing.
+
+The first execution may download a MongoDB executable.
+Subsequent executions normally reuse the cached executable.
+
+Neither the live frontend nor the normal backend server
+needs to be running for these automated tests.
+
+### Security Regression Testing
+
+The current test suite verifies:
+
+- Password hashing with bcrypt.
+- Duplicate email rejection.
+- Invalid login credential rejection.
+- JWT authentication.
+- Missing, invalid, expired, and incorrectly signed tokens.
+- Assignment and subject ownership restrictions.
+- Cross-user retrieval isolation.
+- Unauthorized status update prevention.
+- Unauthorized deletion prevention.
+- Database integrity following unauthorized requests.
+- Assignment status persistence.
+- PATCH CORS preflight configuration.
+
+Known outstanding security vulnerabilities are tracked
+separately and will receive additional regression tests.
+
+### Planned Testing Improvements
+
+- Additional frontend component tests.
+- Authentication UI tests.
+- API input validation tests.
+- Password hash exposure regression tests.
+- Cross-user subject reference validation.
+- Note API integration tests.
+- Notification API integration tests.
+- Resource API integration tests.
+- User profile integration tests.
+- Playwright end-to-end testing.
+- GitHub Actions test automation.
+- CircleCI test automation.
+- Post-deployment validation.
+- Progressive coverage thresholds.
+
+Generated coverage reports are excluded from Git.
 
 ## 📁 Project Structure
 

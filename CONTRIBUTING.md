@@ -343,23 +343,73 @@ Postman may be used for exploratory and manual API testing.
 Automated authorization tests must be added for security-sensitive
 functionality.
 
-### Planned Automated Testing
+### Automated Testing
 
-The project roadmap includes:
+StudySphere uses Vitest and React Testing Library
+for frontend testing, and Node.js Test Runner with
+Supertest for backend integration testing.
 
-- Vitest
-- React Testing Library
-- Supertest
-- Isolated test databases
-- Playwright end-to-end testing
-- Automated regression testing
-- CI/CD test execution
+Before submitting a pull request, execute the applicable
+automated tests from the repository root.
 
-Automated tests must not modify production data.
+Frontend:
 
-Do not describe unimplemented or unexecuted tests as passing.
+```bash
+npm --prefix client test
+```
 
----
+Backend:
+
+```bash
+npm --prefix server test
+```
+
+Frontend coverage:
+
+```bash
+npm --prefix client run test:coverage
+```
+
+Backend coverage:
+
+```bash
+npm --prefix server run test:coverage
+```
+
+Frontend tests are located alongside application components
+and use shared initialization in client/src/test/setup.js.
+
+Backend integration tests are located in server/tests.
+
+Shared backend test fixtures and database lifecycle
+utilities are located in server/tests/helpers.
+
+Backend tests use an isolated MongoDB Memory Server
+instance instead of the existing MongoDB Atlas database.
+
+### Automated Testing Standards
+
+- Write meaningful tests for new functionality.
+- Add regression tests when fixing bugs.
+- Test successful and unsuccessful operations.
+- Verify authorization and resource ownership.
+- Verify database integrity where applicable.
+- Keep test cases independent.
+- Use synthetic test data.
+- Clean up temporary test records.
+- Mock external services where appropriate.
+- Never use production credentials or production data.
+- Never commit generated coverage reports.
+- Never describe unexecuted tests as passing.
+
+### Future Testing Improvements
+
+- Expanded frontend and backend coverage.
+- Playwright end-to-end testing.
+- GitHub Actions and CircleCI test execution.
+- Automated security regression testing.
+- Post-deployment smoke testing.
+- Progressive coverage enforcement.
 
 ## 8. Pull Request Guidelines
 
