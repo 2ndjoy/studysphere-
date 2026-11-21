@@ -1,12 +1,32 @@
+
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
+// Return only fields that are safe to expose to clients.
+function toPublicUser(user) {
+    return {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        bio: user.bio,
+        university: user.university,
+        department: user.department,
+        semester: user.semester,
+        avatar: user.avatar,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+    };
+}
+
+// REGISTER USER
 exports.register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        // Check existing user
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({
+            email,
+        });
 
         if (existingUser) {
             return res.status(400).json({
@@ -14,20 +34,20 @@ exports.register = async (req, res) => {
             });
         }
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(
+            password,
+            10
+        );
 
-        // Create new user
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
         });
 
-        // Response
         res.status(201).json({
             message: "User registered successfully",
-            user,
+            user: toPublicUser(user),
         });
 
     } catch (error) {
@@ -36,14 +56,15 @@ exports.register = async (req, res) => {
         });
     }
 };
-const jwt = require("jsonwebtoken");
 
+// LOGIN USER
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Find user
-        const user = await User.findOne({ email });
+        const user = await User.findOne({
+            email,
+        });
 
         if (!user) {
             return res.status(400).json({
@@ -51,7 +72,6 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Compare password
         const isMatch = await bcrypt.compare(
             password,
             user.password
@@ -63,7 +83,6 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Generate JWT token
         const token = jwt.sign(
             {
                 id: user._id,
@@ -77,7 +96,7 @@ exports.login = async (req, res) => {
         res.status(200).json({
             message: "Login successful",
             token,
-            user,
+            user: toPublicUser(user),
         });
 
     } catch (error) {
@@ -85,5 +104,4 @@ exports.login = async (req, res) => {
             message: error.message,
         });
     }
-
 };
