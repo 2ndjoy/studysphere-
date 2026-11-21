@@ -107,66 +107,101 @@ exports.createAssignment = async (req, res) => {
 
 
 
-// GET ASSIGNMENTS
-// GET ASSIGNMENTS
-exports.getAssignments = async (
-    req,
-    res
-) => {
-    try {
 
+exports.getAssignments = async (req, res) => {
+    try {
         const {
             search,
             status,
             subject,
         } = req.query;
 
-        // Base query
+        // Always restrict results to the authenticated user.
         const query = {
             user: req.user.id,
         };
 
-        // Search filter
-        if (search) {
-            query.title = {
-                $regex: search,
-                $options: "i",
-            };
+        // 1. Validate and safely handle search input.
+        if (search !== undefined) {
+            if (
+                typeof search !== "string" ||
+                search.length > 100
+            ) {
+                return res.status(400).json({
+                    message: "Invalid search filter",
+                });
+            }
+
+            const trimmedSearch = search.trim();
+
+            if (trimmedSearch) {
+                // Escape regular expression special characters.
+                // This makes searches behave like literal text.
+                const escapedSearch = trimmedSearch.replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    "\\$&"
+                );
+
+                query.title = {
+                    $regex: escapedSearch,
+                    $options: "i",
+                };
+            }
         }
 
-        // Status filter
+        // 2. Validate the status filter.
         if (
-            status &&
+            status !== undefined &&
             status !== "all"
         ) {
+            const allowedStatuses = [
+                "pending",
+                "completed",
+            ];
+
+            if (
+                typeof status !== "string" ||
+                !allowedStatuses.includes(status)
+            ) {
+                return res.status(400).json({
+                    message: "Invalid status filter",
+                });
+            }
+
             query.status = status;
         }
 
-        // Subject filter
+        // 3. Validate the subject filter.
         if (
-            subject &&
+            subject !== undefined &&
             subject !== "all"
         ) {
+            if (!mongoose.isObjectIdOrHexString(subject)) {
+                return res.status(400).json({
+                    message: "Invalid subject ID",
+                });
+            }
+
             query.subject = subject;
         }
 
-        const assignments =
-            await Assignment.find(query)
-                .populate("subject")
-                .sort({
-                    createdAt: -1,
-                });
+        // 4. Retrieve only the authenticated user's assignments.
+        const assignments = await Assignment.find(query)
+            .populate("subject")
+            .sort({
+                createdAt: -1,
+            });
 
-        res.json(assignments);
+        return res.status(200).json(assignments);
 
     } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
+        // Do not expose internal database errors to clients.
+        return res.status(500).json({
+            message: "Unable to retrieve assignments",
         });
-
     }
 };
+
 
 // DELETE ASSIGNMENT
 exports.deleteAssignment = async (
