@@ -4,23 +4,74 @@ const Assignment = require(
 const Subject = require(
     "../models/Subject"
 );
+const mongoose = require("mongoose");
 
-// CREATE ASSIGNMENT
-exports.createAssignment = async (
-    req,
-    res
-) => {
+exports.createAssignment = async (req, res) => {
     try {
-
-
         const {
             title,
             dueDate,
             subject,
             priority,
-        } = req.body;
+        } = req.body ?? {};
 
-        // Validate that the subject belongs to the authenticated user.
+        // 1. Validate title.
+        if (
+            typeof title !== "string" ||
+            !title.trim()
+        ) {
+            return res.status(400).json({
+                message: "Title is required",
+            });
+        }
+
+        // 2. Validate subject presence.
+        if (
+            subject === undefined ||
+            subject === null ||
+            subject === ""
+        ) {
+            return res.status(400).json({
+                message: "Subject is required",
+            });
+        }
+
+        // 3. Validate the subject ObjectId.
+        if (!mongoose.isObjectIdOrHexString(subject)) {
+            return res.status(400).json({
+                message: "Invalid subject ID",
+            });
+        }
+
+        // 4. Validate due date.
+        if (
+            typeof dueDate !== "string" ||
+            !dueDate.trim() ||
+            Number.isNaN(new Date(dueDate).getTime())
+        ) {
+            return res.status(400).json({
+                message: "Invalid due date",
+            });
+        }
+
+        // 5. Validate priority.
+        // If omitted, the schema uses "medium".
+        const allowedPriorities = [
+            "low",
+            "medium",
+            "high",
+        ];
+
+        if (
+            priority !== undefined &&
+            !allowedPriorities.includes(priority)
+        ) {
+            return res.status(400).json({
+                message: "Invalid priority",
+            });
+        }
+
+        // 6. Verify subject ownership.
         const ownedSubject = await Subject.findOne({
             _id: subject,
             user: req.user.id,
@@ -32,28 +83,28 @@ exports.createAssignment = async (
             });
         }
 
-        // Create the assignment only after ownership validation.
+        // 7. Create the validated assignment.
         const assignment = await Assignment.create({
-            title,
+            title: title.trim(),
             dueDate,
             subject,
             priority,
             user: req.user.id,
         });
 
-
+        // Preserve the frontend's expected response format.
         await assignment.populate("subject");
 
-        res.status(201).json(assignment);
+        return res.status(201).json(assignment);
 
     } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
+        // Do not expose internal database errors.
+        return res.status(500).json({
+            message: "Unable to create assignment",
         });
-
     }
 };
+
 
 
 // GET ASSIGNMENTS
