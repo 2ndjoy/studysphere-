@@ -1,7 +1,9 @@
 const Assignment = require(
     "../models/Assignment"
 );
-
+const Subject = require(
+    "../models/Subject"
+);
 
 // CREATE ASSIGNMENT
 exports.createAssignment = async (
@@ -10,6 +12,7 @@ exports.createAssignment = async (
 ) => {
     try {
 
+
         const {
             title,
             dueDate,
@@ -17,14 +20,27 @@ exports.createAssignment = async (
             priority,
         } = req.body;
 
-        const assignment =
-            await Assignment.create({
-                title,
-                dueDate,
-                subject,
-                priority,
-                user: req.user.id,
+        // Validate that the subject belongs to the authenticated user.
+        const ownedSubject = await Subject.findOne({
+            _id: subject,
+            user: req.user.id,
+        });
+
+        if (!ownedSubject) {
+            return res.status(404).json({
+                message: "Subject not found",
             });
+        }
+
+        // Create the assignment only after ownership validation.
+        const assignment = await Assignment.create({
+            title,
+            dueDate,
+            subject,
+            priority,
+            user: req.user.id,
+        });
+
 
         await assignment.populate("subject");
 
