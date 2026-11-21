@@ -31,6 +31,7 @@ app.use(
             "GET",
             "POST",
             "PUT",
+            "PATCH",
             "DELETE",
         ],
         credentials: true,

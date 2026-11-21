@@ -26,9 +26,9 @@ exports.createAssignment = async (
                 user: req.user.id,
             });
 
-        res.status(201).json(
-            assignment
-        );
+        await assignment.populate("subject");
+
+        res.status(201).json(assignment);
 
     } catch (error) {
 
@@ -148,39 +148,37 @@ exports.deleteAssignment = async (
 
 
 // TOGGLE STATUS
-exports.toggleStatus = async (
-    req,
-    res
-) => {
+exports.toggleStatus = async (req, res) => {
     try {
 
-        const assignment =
-            await Assignment.findById(
-                req.params.id
-            );
+        // Find assignment belonging to the authenticated user
+        const assignment = await Assignment.findOne({
+            _id: req.params.id,
+            user: req.user.id,
+        });
 
         if (!assignment) {
             return res.status(404).json({
-                message:
-                    "Assignment not found",
+                message: "Assignment not found",
             });
         }
 
+        // Toggle completion status
         assignment.status =
-            assignment.status ===
-                "pending"
+            assignment.status === "pending"
                 ? "completed"
                 : "pending";
 
         await assignment.save();
 
+        // Preserve subject details in the response
+        await assignment.populate("subject");
+
         res.json(assignment);
 
     } catch (error) {
-
         res.status(500).json({
             message: error.message,
         });
-
     }
 };
