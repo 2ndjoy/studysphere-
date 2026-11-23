@@ -1,47 +1,44 @@
-const express = require(
-    "express"
-);
 
-const router =
-    express.Router();
+const express = require("express");
+const router = express.Router();
 
 const protect = require(
     "../middleware/authMiddleware"
 );
+
 const validateObjectId = require(
     "../middleware/validateObjectId"
 );
-const upload = require(
-    "../middleware/uploadMiddleware"
-);
+
+const {
+    resourceUpload,
+    validateFileIfPresent,
+    handleUploadError,
+} = require("../middleware/uploadMiddleware");
 
 const {
     uploadResource,
     getResources,
     deleteResource,
-} = require(
-    "../controllers/resourceController"
-);
+} = require("../controllers/resourceController");
 
-
-// UPLOAD
+// UPLOAD RESOURCE
 router.post(
     "/",
     protect,
-    upload.single("file"),
+    resourceUpload.single("file"),
+    validateFileIfPresent,
     uploadResource
 );
 
-
-// GET
+// GET RESOURCES
 router.get(
     "/",
     protect,
     getResources
 );
 
-
-// DELETE
+// DELETE RESOURCE
 router.delete(
     "/:id",
     protect,
@@ -49,5 +46,7 @@ router.delete(
     deleteResource
 );
 
+// Handle errors from the upload middleware.
+router.use(handleUploadError);
 
 module.exports = router;
