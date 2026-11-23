@@ -343,7 +343,7 @@ Open the frontend URL in your browser.
 
 | Service | URL |
 |---|---|
-| Frontend | http://localhost:5173 |
+| Frontend | http://localhost:5173 (or 5174/5175) |
 | Backend API | http://localhost:5000/api |
 
 Both services must be running for the complete application to work.

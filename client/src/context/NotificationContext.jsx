@@ -4,7 +4,7 @@ import {
     useEffect,
     useState,
 } from "react";
-
+import { AuthContext } from "./AuthContext";
 import {
     getNotifications,
 } from "../services/notificationService";
@@ -14,7 +14,7 @@ const NotificationContext =
 
 export const NotificationProvider =
     ({ children }) => {
-
+        const { token } = useContext(AuthContext);
         const [
             notifications,
             setNotifications,
@@ -50,6 +50,8 @@ export const NotificationProvider =
             };
 
         useEffect(() => {
+            if (!token) return;
+
             let active = true;
 
             getNotifications()
@@ -57,7 +59,9 @@ export const NotificationProvider =
                     if (active) setNotifications(data);
                 })
                 .catch((error) => {
-                    console.error("Failed to load notifications", error);
+                    if (active) {
+                        console.error("Failed to load notifications", error);
+                    }
                 })
                 .finally(() => {
                     if (active) setLoading(false);
@@ -66,7 +70,7 @@ export const NotificationProvider =
             return () => {
                 active = false;
             };
-        }, []);
+        }, [token]);
 
         const unreadCount =
             notifications.filter(
