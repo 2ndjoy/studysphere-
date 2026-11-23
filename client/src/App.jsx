@@ -1,91 +1,111 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import { lazy, Suspense } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+
 import ProtectedRoute from "./components/ProtectedRoute";
-import Subjects from "./pages/Subjects";
-import Assignments from "./pages/Assignments";
-import Notes from "./pages/Notes";
-import CalendarPage from "./pages/Calendar";
-import Resources from "./pages/Resources";
-import NotFound from "./pages/NotFound";
 
-import Profile from "./pages/Profile";
-
+// Load each page only when needed.
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Subjects = lazy(() => import("./pages/Subjects"));
+const Assignments = lazy(() => import("./pages/Assignments"));
+const Notes = lazy(() => import("./pages/Notes"));
+const CalendarPage = lazy(() => import("./pages/Calendar"));
+const Resources = lazy(() => import("./pages/Resources"));
+const Profile = lazy(() => import("./pages/Profile"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0f172a] text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-white text-gray-900 dark:bg-[#0f172a] dark:text-white">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+        <Suspense
+          fallback={
+            <div
+              role="status"
+              className="flex min-h-screen items-center justify-center"
+            >
+              Loading...
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          <Route
-            path="/subjects"
-            element={
-              <ProtectedRoute>
-                <Subjects />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/assignments"
-            element={
-              <ProtectedRoute>
-                <Assignments />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/subjects"
+              element={
+                <ProtectedRoute>
+                  <Subjects />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/notes"
-            element={
-              <ProtectedRoute>
-                <Notes />
-              </ProtectedRoute>
-            }
-          /><Route
-            path="/calendar"
-            element={
-              <ProtectedRoute>
-                <CalendarPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/resources"
-            element={
-              <ProtectedRoute>
-                <Resources />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="*"
-            element={<NotFound />}
-          />
-          <Route
-    path="/profile"
-    element={
-        <ProtectedRoute>
-            <Profile />
-        </ProtectedRoute>
-    }
-/>
-        </Routes>
+            <Route
+              path="/assignments"
+              element={
+                <ProtectedRoute>
+                  <Assignments />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/notes"
+              element={
+                <ProtectedRoute>
+                  <Notes />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/calendar"
+              element={
+                <ProtectedRoute>
+                  <CalendarPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/resources"
+              element={
+                <ProtectedRoute>
+                  <Resources />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </div>
   );
