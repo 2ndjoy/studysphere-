@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
 function Register() {

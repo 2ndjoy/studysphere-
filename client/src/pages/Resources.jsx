@@ -39,34 +39,24 @@ function Resources() {
 
 
     // FETCH
-    const fetchResources =
-        async () => {
-
-            try {
-
-                const data =
-                    await getResources();
-
-                setResources(data);
-
-            } catch (error) {
-
-                console.log(error);
-
-            } finally {
-
-                setLoading(false);
-
-            }
-        };
-
-
     useEffect(() => {
+        let active = true;
 
-        fetchResources();
+        getResources()
+            .then((data) => {
+                if (active) setResources(data);
+            })
+            .catch((error) => {
+                console.error("Failed to load resources", error);
+            })
+            .finally(() => {
+                if (active) setLoading(false);
+            });
 
+        return () => {
+            active = false;
+        };
     }, []);
-
 
     // UPLOAD
     const handleUpload =
@@ -114,7 +104,7 @@ function Resources() {
                 setTitle("");
                 setFile(null);
 
-            } catch (error) {
+            } catch {
 
                 toast.error(
                     "Upload failed"
@@ -147,7 +137,7 @@ function Resources() {
                     "Resource deleted"
                 );
 
-            } catch (error) {
+            } catch {
 
                 toast.error(
                     "Delete failed"

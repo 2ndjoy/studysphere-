@@ -50,9 +50,22 @@ export const NotificationProvider =
             };
 
         useEffect(() => {
+            let active = true;
 
-            fetchNotifications();
+            getNotifications()
+                .then((data) => {
+                    if (active) setNotifications(data);
+                })
+                .catch((error) => {
+                    console.error("Failed to load notifications", error);
+                })
+                .finally(() => {
+                    if (active) setLoading(false);
+                });
 
+            return () => {
+                active = false;
+            };
         }, []);
 
         const unreadCount =

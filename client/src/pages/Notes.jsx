@@ -37,34 +37,24 @@ function Notes() {
 
 
     // FETCH
-    const fetchNotes =
-        async () => {
-
-            try {
-
-                const data =
-                    await getNotes();
-
-                setNotes(data);
-
-            } catch (error) {
-
-                console.log(error);
-
-            } finally {
-
-                setLoading(false);
-
-            }
-        };
-
-
     useEffect(() => {
+        let active = true;
 
-        fetchNotes();
+        getNotes()
+            .then((data) => {
+                if (active) setNotes(data);
+            })
+            .catch((error) => {
+                console.error("Failed to load notes", error);
+            })
+            .finally(() => {
+                if (active) setLoading(false);
+            });
 
+        return () => {
+            active = false;
+        };
     }, []);
-
 
     // CREATE
     const handleCreate =
@@ -98,7 +88,7 @@ function Notes() {
                 setTitle("");
                 setContent("");
 
-            } catch (error) {
+            } catch {
 
                 toast.error(
                     "Failed to create note"
@@ -127,7 +117,7 @@ function Notes() {
                     "Note deleted"
                 );
 
-            } catch (error) {
+            } catch{
 
                 toast.error(
                     "Delete failed"

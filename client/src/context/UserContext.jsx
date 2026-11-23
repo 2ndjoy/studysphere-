@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(() => Boolean(localStorage.getItem("token")));
 
     const fetchUser = async () => {
 
@@ -45,9 +45,25 @@ export const UserProvider = ({ children }) => {
     };
 
     useEffect(() => {
+        if (!localStorage.getItem("token")) return;
 
-        fetchUser();
+        let active = true;
 
+        getProfile()
+            .then((profile) => {
+                if (active) setUser(profile);
+            })
+            .catch((error) => {
+                console.error("Failed to load user", error);
+                if (active) setUser(null);
+            })
+            .finally(() => {
+                if (active) setLoading(false);
+            });
+
+        return () => {
+            active = false;
+        };
     }, []);
 
     return (
