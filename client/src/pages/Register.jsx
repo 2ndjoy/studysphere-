@@ -37,10 +37,11 @@ function Register() {
             navigate("/login");
 
         } catch (error) {
-            console.log(error.response.data);
-
-            toast.error(error.response.data.message);
-        }
+    toast.error(
+        error.response?.data?.message ||
+        "Registration failed. Please check your connection."
+    );
+}
     };
 
     return (
