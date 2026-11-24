@@ -1,49 +1,79 @@
 const Resource = require(
     "../models/Resource"
 );
-
-
+const {
+    uploadBufferToCloudinary,
+    deleteAssetFromCloudinary,
+} = require("../services/cloudinaryUpload");
 // UPLOAD RESOURCE
-exports.uploadResource =
-    async (req, res) => {
+
+
+exports.uploadResource = async (req, res) => {
+    // Preserve the existing no-file response.
+    if (!req.file) {
+        return res.status(400).json({
+            message: "No file uploaded",
+        });
+    }
+
+    const title = req.body?.title;
+
+    if (
+        typeof title !== "string" ||
+        !title.trim()
+    ) {
+        return res.status(400).json({
+            message: "Title is required",
+        });
+    }
+
+    // Upload to Cloudinary and retain the
+    // metadata needed for possible cleanup.
+    let uploadedAsset;
+
+    try {
+        uploadedAsset = await uploadBufferToCloudinary(
+            req.file,
+            { includeMetadata: true }
+        );
+    } catch {
+        return res.status(502).json({
+            message: "File upload failed",
+        });
+    }
+
+    // Store the secure URL in MongoDB.
+    try {
+        const resource = await Resource.create({
+            title: title.trim(),
+            fileUrl: uploadedAsset.url,
+            fileType: req.file.mimetype,
+            user: req.user.id,
+        });
+
+        return res.status(201).json(resource);
+    } catch {
+        // MongoDB failed after Cloudinary
+        // accepted the upload.
+        // Attempt to remove the orphaned asset.
         try {
-
-            if (!req.file) {
-                return res
-                    .status(400)
-                    .json({
-                        message:
-                            "No file uploaded",
-                    });
-            }
-
-            const resource =
-                await Resource.create({
-                    title:
-                        req.body.title,
-
-                    fileUrl:
-                        req.file.path,
-
-                    fileType:
-                        req.file.mimetype,
-
-                    user: req.user.id,
-                });
-
-            res.status(201).json(
-                resource
+            await deleteAssetFromCloudinary(
+                uploadedAsset
             );
-
-        } catch (error) {
-
-            res.status(500).json({
-                message:
-                    error.message,
-            });
-
+        } catch {
+            // Do not reveal provider errors
+            // to the client.
+            console.error(
+                "Cloud asset cleanup failed after resource save error"
+            );
         }
-    };
+
+        return res.status(500).json({
+            message: "Unable to save resource",
+        });
+    }
+};
+
 
 
 // GET USER RESOURCES

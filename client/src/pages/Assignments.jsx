@@ -58,65 +58,44 @@ function Assignments() {
     const [priority, setPriority] =
         useState("medium");
     // FETCH DATA
-    const fetchAssignments =
-        async () => {
-
-            try {
-
-                setLoading(true);
-
-                const data =
-                    await getAssignments({
-                        search: debouncedSearch,
-                        status: statusFilter,
-                        subject: subjectFilter,
-                    });
-
-                setAssignments(data);
-
-            } catch (error) {
-
-                console.log(error);
-
-            } finally {
-
-                setLoading(false);
-
-            }
-        };
-
-    const fetchSubjects =
-        async () => {
-
-            try {
-
-                const data =
-                    await getSubjects();
-
-                setSubjects(data);
-
-            } catch (error) {
-
-                console.log(error);
-
-            }
-        };
     useEffect(() => {
+        let active = true;
 
-        fetchSubjects();
+        getSubjects()
+            .then((data) => {
+                if (active) setSubjects(data);
+            })
+            .catch((error) => {
+                console.error("Failed to load subjects", error);
+            });
 
+        return () => {
+            active = false;
+        };
     }, []);
 
-
     useEffect(() => {
+        let active = true;
 
-        fetchAssignments();
+        getAssignments({
+            search: debouncedSearch,
+            status: statusFilter,
+            subject: subjectFilter,
+        })
+            .then((data) => {
+                if (active) setAssignments(data);
+            })
+            .catch((error) => {
+                console.error("Failed to load assignments", error);
+            })
+            .finally(() => {
+                if (active) setLoading(false);
+            });
 
-    }, [
-  debouncedSearch,
-  statusFilter,
-  subjectFilter,
-]);
+        return () => {
+            active = false;
+        };
+    }, [debouncedSearch, statusFilter, subjectFilter]);
 
     // CREATE
     const handleCreate =

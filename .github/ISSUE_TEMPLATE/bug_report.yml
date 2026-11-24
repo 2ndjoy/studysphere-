@@ -1,0 +1,155 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in StudySphere.
+title: "fix: "
+labels: ["bug"]
+assignees:
+  - 2ndjoy
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug in StudySphere.
+        Please provide enough information to reproduce and investigate the issue.
+
+        Do not include passwords, JWT tokens, API keys,
+        database credentials, or other sensitive information.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Clearly describe the problem.
+      placeholder: What is not working correctly?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which part of StudySphere is affected?
+      options:
+        - Frontend
+        - Backend API
+        - Authentication and Authorization
+        - Database
+        - File Uploads and Storage
+        - Notifications
+        - Docker and Containerization
+        - CI/CD Pipeline
+        - Cloud Infrastructure
+        - Security
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Provide step-by-step instructions.
+      placeholder: |
+        1. Log in to StudySphere.
+        2. Navigate to the affected page.
+        3. Perform the action.
+        4. Observe the error.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What happens instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Local Development
+        - Docker Environment
+        - Staging
+        - Production
+        - CI/CD Environment
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version or Commit
+      description: Provide the application version or Git commit SHA.
+      placeholder: "Example: 0cf2897"
+    validations:
+      required: false
+
+  - type: input
+    id: browser_os
+    attributes:
+      label: Browser and Operating System
+      placeholder: "Example: Chrome, Windows 11"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested Severity
+      options:
+        - Critical - Application unavailable or serious security risk
+        - High - Major functionality affected
+        - Medium - Partial functionality affected
+        - Low - Minor issue or visual defect
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Messages and Logs
+      description: Include relevant sanitized logs or error messages.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or Evidence
+      description: Attach screenshots or recordings with sensitive information removed.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Include any other relevant information.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Submission Checklist
+      options:
+        - label: I have checked for existing issues.
+          required: true
+        - label: I have provided sufficient reproduction steps.
+          required: true
+        - label: I have removed sensitive information.
+          required: true

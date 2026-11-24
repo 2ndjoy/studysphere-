@@ -1,0 +1,58 @@
+# StudySphere Code Ownership
+#
+# Repository maintainer: @2ndjoy
+#
+# The last matching pattern takes precedence.
+# Update ownership rules when additional contributors join.
+
+# Default repository owner
+* @2ndjoy
+
+# Frontend application
+/client/ @2ndjoy
+
+# Backend application
+/server/ @2ndjoy
+
+# Authentication and authorization
+/server/middleware/ @2ndjoy
+/server/controllers/authController.js @2ndjoy
+/server/routes/authRoutes.js @2ndjoy
+
+# Dependency management
+/client/package.json @2ndjoy
+/client/package-lock.json @2ndjoy
+/server/package.json @2ndjoy
+/server/package-lock.json @2ndjoy
+
+# GitHub configuration and CI/CD
+/.github/ @2ndjoy
+/.github/workflows/ @2ndjoy
+
+# Environment configuration
+/.gitignore @2ndjoy
+/client/.env.example @2ndjoy
+/server/.env.example @2ndjoy
+
+# Containerization - planned
+**/Dockerfile @2ndjoy
+**/.dockerignore @2ndjoy
+/docker-compose.yml @2ndjoy
+/docker-compose.yaml @2ndjoy
+/compose.yml @2ndjoy
+/compose.yaml @2ndjoy
+
+# CircleCI - planned
+/.circleci/ @2ndjoy
+
+# Cloud infrastructure - planned
+/infra/ @2ndjoy
+
+# Documentation
+/README.md @2ndjoy
+/CONTRIBUTING.md @2ndjoy
+/SECURITY.md @2ndjoy
+/docs/ @2ndjoy
+
+# CODEOWNERS configuration
+/.github/CODEOWNERS @2ndjoy

@@ -1,105 +1,207 @@
 const Assignment = require(
     "../models/Assignment"
 );
+const Subject = require(
+    "../models/Subject"
+);
+const mongoose = require("mongoose");
 
-
-// CREATE ASSIGNMENT
-exports.createAssignment = async (
-    req,
-    res
-) => {
+exports.createAssignment = async (req, res) => {
     try {
-
         const {
             title,
             dueDate,
             subject,
             priority,
-        } = req.body;
+        } = req.body ?? {};
 
-        const assignment =
-            await Assignment.create({
-                title,
-                dueDate,
-                subject,
-                priority,
-                user: req.user.id,
+        // 1. Validate title.
+        if (
+            typeof title !== "string" ||
+            !title.trim()
+        ) {
+            return res.status(400).json({
+                message: "Title is required",
             });
+        }
 
-        res.status(201).json(
-            assignment
-        );
+        // 2. Validate subject presence.
+        if (
+            subject === undefined ||
+            subject === null ||
+            subject === ""
+        ) {
+            return res.status(400).json({
+                message: "Subject is required",
+            });
+        }
 
-    } catch (error) {
+        // 3. Validate the subject ObjectId.
+        if (!mongoose.isObjectIdOrHexString(subject)) {
+            return res.status(400).json({
+                message: "Invalid subject ID",
+            });
+        }
 
-        res.status(500).json({
-            message: error.message,
+        // 4. Validate due date.
+        if (
+            typeof dueDate !== "string" ||
+            !dueDate.trim() ||
+            Number.isNaN(new Date(dueDate).getTime())
+        ) {
+            return res.status(400).json({
+                message: "Invalid due date",
+            });
+        }
+
+        // 5. Validate priority.
+        // If omitted, the schema uses "medium".
+        const allowedPriorities = [
+            "low",
+            "medium",
+            "high",
+        ];
+
+        if (
+            priority !== undefined &&
+            !allowedPriorities.includes(priority)
+        ) {
+            return res.status(400).json({
+                message: "Invalid priority",
+            });
+        }
+
+        // 6. Verify subject ownership.
+        const ownedSubject = await Subject.findOne({
+            _id: subject,
+            user: req.user.id,
         });
 
+        if (!ownedSubject) {
+            return res.status(404).json({
+                message: "Subject not found",
+            });
+        }
+
+        // 7. Create the validated assignment.
+        const assignment = await Assignment.create({
+            title: title.trim(),
+            dueDate,
+            subject,
+            priority,
+            user: req.user.id,
+        });
+
+        // Preserve the frontend's expected response format.
+        await assignment.populate("subject");
+
+        return res.status(201).json(assignment);
+
+    } catch (error) {
+        // Do not expose internal database errors.
+        return res.status(500).json({
+            message: "Unable to create assignment",
+        });
     }
 };
 
 
-// GET ASSIGNMENTS
-// GET ASSIGNMENTS
-exports.getAssignments = async (
-    req,
-    res
-) => {
-    try {
 
+
+exports.getAssignments = async (req, res) => {
+    try {
         const {
             search,
             status,
             subject,
         } = req.query;
 
-        // Base query
+        // Always restrict results to the authenticated user.
         const query = {
             user: req.user.id,
         };
 
-        // Search filter
-        if (search) {
-            query.title = {
-                $regex: search,
-                $options: "i",
-            };
+        // 1. Validate and safely handle search input.
+        if (search !== undefined) {
+            if (
+                typeof search !== "string" ||
+                search.length > 100
+            ) {
+                return res.status(400).json({
+                    message: "Invalid search filter",
+                });
+            }
+
+            const trimmedSearch = search.trim();
+
+            if (trimmedSearch) {
+                // Escape regular expression special characters.
+                // This makes searches behave like literal text.
+                const escapedSearch = trimmedSearch.replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    "\\$&"
+                );
+
+                query.title = {
+                    $regex: escapedSearch,
+                    $options: "i",
+                };
+            }
         }
 
-        // Status filter
+        // 2. Validate the status filter.
         if (
-            status &&
+            status !== undefined &&
             status !== "all"
         ) {
+            const allowedStatuses = [
+                "pending",
+                "completed",
+            ];
+
+            if (
+                typeof status !== "string" ||
+                !allowedStatuses.includes(status)
+            ) {
+                return res.status(400).json({
+                    message: "Invalid status filter",
+                });
+            }
+
             query.status = status;
         }
 
-        // Subject filter
+        // 3. Validate the subject filter.
         if (
-            subject &&
+            subject !== undefined &&
             subject !== "all"
         ) {
+            if (!mongoose.isObjectIdOrHexString(subject)) {
+                return res.status(400).json({
+                    message: "Invalid subject ID",
+                });
+            }
+
             query.subject = subject;
         }
 
-        const assignments =
-            await Assignment.find(query)
-                .populate("subject")
-                .sort({
-                    createdAt: -1,
-                });
+        // 4. Retrieve only the authenticated user's assignments.
+        const assignments = await Assignment.find(query)
+            .populate("subject")
+            .sort({
+                createdAt: -1,
+            });
 
-        res.json(assignments);
+        return res.status(200).json(assignments);
 
     } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
+        // Do not expose internal database errors to clients.
+        return res.status(500).json({
+            message: "Unable to retrieve assignments",
         });
-
     }
 };
+
 
 // DELETE ASSIGNMENT
 exports.deleteAssignment = async (
@@ -148,39 +250,37 @@ exports.deleteAssignment = async (
 
 
 // TOGGLE STATUS
-exports.toggleStatus = async (
-    req,
-    res
-) => {
+exports.toggleStatus = async (req, res) => {
     try {
 
-        const assignment =
-            await Assignment.findById(
-                req.params.id
-            );
+        // Find assignment belonging to the authenticated user
+        const assignment = await Assignment.findOne({
+            _id: req.params.id,
+            user: req.user.id,
+        });
 
         if (!assignment) {
             return res.status(404).json({
-                message:
-                    "Assignment not found",
+                message: "Assignment not found",
             });
         }
 
+        // Toggle completion status
         assignment.status =
-            assignment.status ===
-                "pending"
+            assignment.status === "pending"
                 ? "completed"
                 : "pending";
 
         await assignment.save();
 
+        // Preserve subject details in the response
+        await assignment.populate("subject");
+
         res.json(assignment);
 
     } catch (error) {
-
         res.status(500).json({
             message: error.message,
         });
-
     }
 };

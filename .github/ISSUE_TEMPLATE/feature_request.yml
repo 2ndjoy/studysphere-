@@ -1,0 +1,165 @@
+name: Feature Request
+description: Propose a new feature or improvement for StudySphere.
+title: "feat: "
+labels: ["enhancement"]
+assignees:
+  - 2ndjoy
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to propose new features,
+        technical improvements, or infrastructure enhancements.
+
+        Please describe the problem, proposed solution,
+        and expected benefits.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Feature Summary
+      description: Briefly describe the proposed feature.
+      placeholder: What would you like to improve or introduce?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      options:
+        - Frontend and User Experience
+        - Backend API
+        - Authentication and Authorization
+        - Database
+        - Notifications
+        - Academic Management
+        - Automated Testing
+        - Docker and Containerization
+        - CI/CD
+        - Cloud Infrastructure
+        - Security and DevSecOps
+        - Monitoring and Reliability
+        - Performance Optimization
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Explain the problem or limitation this feature addresses.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe how the feature should work.
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Expected Benefits
+      description: Explain the value this improvement will provide.
+      placeholder: |
+        - Improved user experience
+        - Improved application security
+        - Reduced deployment time
+        - Increased reliability
+    validations:
+      required: true
+
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Functional Requirements
+      description: Define what the proposed feature must do.
+      placeholder: |
+        - Requirement 1
+        - Requirement 2
+        - Requirement 3
+    validations:
+      required: false
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Proposed Implementation Tasks
+      description: Break the implementation into manageable tasks.
+      placeholder: |
+        - [ ] Design the solution
+        - [ ] Implement backend changes
+        - [ ] Implement frontend changes
+        - [ ] Add automated tests
+        - [ ] Update documentation
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Define measurable conditions for completing this issue.
+      placeholder: |
+        - [ ] Feature works as expected
+        - [ ] Existing functionality remains unaffected
+        - [ ] Relevant tests pass
+        - [ ] Documentation is updated
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Suggested Priority
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and Related Issues
+      description: List related GitHub issues or technical dependencies.
+      placeholder: "Example: Depends on Issue #5"
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Describe any other approaches considered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Include relevant diagrams, screenshots, or references.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Submission Checklist
+      options:
+        - label: I have checked for duplicate feature requests.
+          required: true
+        - label: I have described the expected benefits.
+          required: true
+        - label: I have provided measurable acceptance criteria.
+          required: true

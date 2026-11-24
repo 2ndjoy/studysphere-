@@ -3,8 +3,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
-// import toast from "react-hot-toast";
-import { motion } from "framer-motion";
 function Login() {
     const navigate = useNavigate();
 

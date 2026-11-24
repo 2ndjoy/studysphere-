@@ -1,0 +1,92 @@
+﻿name: StudySphere CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend Tests and Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Run backend tests
+        working-directory: server
+        run: npm test
+
+      - name: Audit backend production dependencies
+        working-directory: server
+        run: npm audit --omit=dev --audit-level=high
+
+  frontend:
+    name: Frontend Lint, Tests and Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: client
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: client
+        run: npm run lint
+
+      - name: Run frontend tests
+        working-directory: client
+        run: npm test
+
+      - name: Build frontend
+        working-directory: client
+        run: npm run build
+
+      - name: Audit frontend production dependencies
+        working-directory: client
+        run: npm audit --omit=dev --audit-level=high
+
+  docker:
+    name: Docker Image Builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [backend, frontend]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build backend Docker image
+        run: docker build -t studysphere-backend:ci ./server
+
+      - name: Build frontend Docker image
+        run: docker build -t studysphere-frontend:ci ./client

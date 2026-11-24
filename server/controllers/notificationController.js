@@ -57,39 +57,36 @@ exports.createNotification = async (req, res) => {
 
 };
 
-// MARK AS READ
+
+ // MARK AS READ
 exports.markAsRead = async (req, res) => {
-
     try {
-
-        const notification =
-            await Notification.findById(
-                req.params.id
-            );
+        // Find the notification only if it belongs
+        // to the authenticated user.
+        const notification = await Notification.findOne({
+            _id: req.params.id,
+            user: req.user.id,
+        });
 
         if (!notification) {
-
             return res.status(404).json({
                 message: "Notification not found",
             });
-
         }
 
         notification.isRead = true;
 
         await notification.save();
 
-        res.json(notification);
+        return res.status(200).json(notification);
 
     } catch (error) {
-
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
         });
-
     }
-
 };
+
 
 // MARK ALL AS READ
 exports.markAllAsRead = async (req, res) => {

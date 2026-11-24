@@ -24,13 +24,20 @@ app.use(
     cors({
         origin: [
             "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:5175",
             "https://dashing-bublanina-164786.netlify.app",
-            "https://studysphere-mocha.vercel.app"
+            "https://studysphere-mocha.vercel.app",
+            ...(process.env.CLIENT_ORIGINS || "")
+                .split(",")
+                .map((origin) => origin.trim())
+                .filter(Boolean),
         ],
         methods: [
             "GET",
             "POST",
             "PUT",
+            "PATCH",
             "DELETE",
         ],
         credentials: true,

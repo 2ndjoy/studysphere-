@@ -17,11 +17,6 @@ function ResourceCard({
             "pdf"
         );
 
-    const isImage =
-        resource.fileType?.includes(
-            "image"
-        );
-
     return (
         <motion.div
             layout

@@ -5,7 +5,9 @@ const router = express.Router();
 const protect = require(
     "../middleware/authMiddleware"
 );
-
+const validateObjectId = require(
+    "../middleware/validateObjectId"
+);
 const {
     createAssignment,
     getAssignments,
@@ -36,6 +38,7 @@ router.get(
 router.delete(
     "/:id",
     protect,
+    validateObjectId,
     deleteAssignment
 );
 
@@ -44,6 +47,7 @@ router.delete(
 router.patch(
     "/:id",
     protect,
+    validateObjectId,
     toggleStatus
 );
 

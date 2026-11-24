@@ -1,5 +1,8 @@
 const User = require("../models/User");
-
+const {
+    uploadBufferToCloudinary,
+    deleteAssetFromCloudinary,
+} = require("../services/cloudinaryUpload");
 // GET PROFILE
 exports.getProfile = async (req, res) => {
     try {
@@ -73,37 +76,73 @@ exports.updateProfile = async (req, res) => {
     }
 };
 // UPLOAD AVATAR
+
+
 exports.uploadAvatar = async (req, res) => {
+    // Preserve the existing no-file response.
+    if (!req.file) {
+        return res.status(400).json({
+            message: "No image uploaded",
+        });
+    }
+
+    let user;
+
     try {
+        user = await User.findById(
+            req.user.id
+        );
+    } catch {
+        return res.status(500).json({
+            message: "Unable to update avatar",
+        });
+    }
 
-        if (!req.file) {
-            return res.status(400).json({
-                message: "No image uploaded",
-            });
-        }
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found",
+        });
+    }
 
-        const user = await User.findById(req.user.id);
+    // Upload and keep the asset metadata
+    // required for cleanup if saving fails.
+    let uploadedAsset;
 
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found",
-            });
-        }
+    try {
+        uploadedAsset = await uploadBufferToCloudinary(
+            req.file,
+            { includeMetadata: true }
+        );
+    } catch {
+        return res.status(502).json({
+            message: "File upload failed",
+        });
+    }
 
-        user.avatar = req.file.path;
+    try {
+        user.avatar = uploadedAsset.url;
 
         await user.save();
 
-        res.json({
+        return res.status(200).json({
             message: "Avatar updated successfully",
             avatar: user.avatar,
         });
+    } catch {
+        // Upload succeeded but MongoDB failed.
+        // Attempt to remove the new orphaned image.
+        try {
+            await deleteAssetFromCloudinary(
+                uploadedAsset
+            );
+        } catch {
+            console.error(
+                "Cloud asset cleanup failed after avatar save error"
+            );
+        }
 
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
+        return res.status(500).json({
+            message: "Unable to update avatar",
         });
-
     }
 };

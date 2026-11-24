@@ -1,29 +1,47 @@
-const express = require("express");
 
+const express = require("express");
 const router = express.Router();
 
-const protect = require("../middleware/authMiddleware");
-const upload = require("../middleware/uploadMiddleware");
+const protect = require(
+    "../middleware/authMiddleware"
+);
 
 const {
-    getProfile,updateProfile,uploadAvatar
+    avatarUpload,
+    validateFileIfPresent,
+    handleUploadError,
+} = require("../middleware/uploadMiddleware");
+
+const {
+    getProfile,
+    updateProfile,
+    uploadAvatar,
 } = require("../controllers/userController");
 
+// GET PROFILE
 router.get(
     "/profile",
     protect,
     getProfile
 );
+
+// UPDATE PROFILE
 router.put(
     "/profile",
     protect,
     updateProfile
 );
+
+// UPLOAD AVATAR
 router.post(
     "/avatar",
     protect,
-    upload.single("file"),
+    avatarUpload.single("file"),
+    validateFileIfPresent,
     uploadAvatar
 );
+
+// Handle errors from the upload middleware.
+router.use(handleUploadError);
 
 module.exports = router;

@@ -26,30 +26,24 @@ function Subjects() {
 
 
     // FETCH SUBJECTS
-    const fetchSubjects = async () => {
-        try {
-
-            const data =
-                await getSubjects();
-
-            setSubjects(data);
-
-        } catch (error) {
-
-            console.log(error);
-
-        } finally {
-
-            setLoading(false);
-
-        }
-    };
-
-
     useEffect(() => {
-        fetchSubjects();
-    }, []);
+        let active = true;
 
+        getSubjects()
+            .then((data) => {
+                if (active) setSubjects(data);
+            })
+            .catch((error) => {
+                console.error("Failed to load subjects", error);
+            })
+            .finally(() => {
+                if (active) setLoading(false);
+            });
+
+        return () => {
+            active = false;
+        };
+    }, []);
 
     // CREATE SUBJECT
     const handleCreateSubject =

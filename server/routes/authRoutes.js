@@ -1,3 +1,4 @@
+
 const express = require("express");
 
 const router = express.Router();
@@ -7,19 +8,41 @@ const {
     login,
 } = require("../controllers/authController");
 
-const protect = require("../middleware/authMiddleware");
+const protect = require(
+    "../middleware/authMiddleware"
+);
 
-router.post("/register", register);
+const {
+    loginLimiter,
+    registerLimiter,
+} = require(
+    "../middleware/authRateLimiter"
+);
 
-router.post("/login", login);
+// REGISTER
+router.post(
+    "/register",
+    registerLimiter,
+    register
+);
 
-router.get("/me", protect, (req, res) => {
+// LOGIN
+router.post(
+    "/login",
+    loginLimiter,
+    login
+);
 
-    res.json({
-        message: "Protected route accessed",
-        user: req.user,
-    });
-
-});
+// PROTECTED TEST ROUTE
+router.get(
+    "/me",
+    protect,
+    (req, res) => {
+        return res.json({
+            message: "Protected route accessed",
+            user: req.user,
+        });
+    }
+);
 
 module.exports = router;

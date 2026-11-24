@@ -2,27 +2,40 @@ const Subject = require("../models/Subject");
 
 
 // CREATE SUBJECT
+
 exports.createSubject = async (req, res) => {
     try {
+        const {
+            title,
+            color,
+        } = req.body ?? {};
 
-        const { title, color } = req.body;
+        // Validate the required subject title.
+        if (
+            typeof title !== "string" ||
+            !title.trim()
+        ) {
+            return res.status(400).json({
+                message: "Title is required",
+            });
+        }
 
         const subject = await Subject.create({
-            title,
+            title: title.trim(),
             color,
             user: req.user.id,
         });
 
-        res.status(201).json(subject);
+        return res.status(201).json(subject);
 
     } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
+        // Do not expose internal database errors.
+        return res.status(500).json({
+            message: "Unable to create subject",
         });
-
     }
 };
+
 
 
 // GET USER SUBJECTS

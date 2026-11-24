@@ -1,7 +1,41 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+    plugins: [react()],
+
+    test: {
+        environment: "jsdom",
+
+        globals: false,
+
+        setupFiles: ["./src/test/setup.js"],
+
+        include: [
+            "src/**/*.{test,spec}.{js,jsx}",
+        ],
+
+        coverage: {
+            provider: "v8",
+
+            reporter: [
+                "text",
+                "html",
+                "lcov",
+            ],
+
+            reportsDirectory: "./coverage",
+
+            include: [
+                "src/**/*.{js,jsx}",
+            ],
+
+            exclude: [
+                "src/test/**",
+                "**/*.test.{js,jsx}",
+                "**/*.spec.{js,jsx}",
+                "src/main.jsx",
+            ],
+        },
+    },
+});

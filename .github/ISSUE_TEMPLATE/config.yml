@@ -1,0 +1,6 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Report a Security Vulnerability
+    url: https://github.com/2ndjoy
+    about: Contact the repository maintainer privately about security vulnerabilities. Do not disclose sensitive information in public issues.
